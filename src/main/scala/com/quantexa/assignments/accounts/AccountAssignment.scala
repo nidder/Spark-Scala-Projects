@@ -115,23 +115,20 @@ val stats = x.map(a => {
   AccountsStatistics(customer_id,accounts,number,total,avg)
 
 }).toSeq
-  //stats.foreach(println(_))
+  
 
   val accountstats = stats.toDS.as[AccountsStatistics]
   val datasets = customerDS.join(accountstats, Seq("customerId"), "outer").sort("customerId").as[CustomerAccountOutput]
-
-  //datasets.show()
 
   val nulls = Map("numberAccounts"-> 0, "totalBalance"-> 0, "averageBalance" -> 0)
   datasets.na.fill(nulls).show(false)
 
   //code for the join
-  //val fullData = accountDS.joinWith(customerDS, accountDS("customerId") === customerDS("customerId"),"outer")
-  //val fulldf = fullData.as[CustomerAccountOutput]
-  //fulldf.show()
+  val fullData = accountDS.joinWith(customerDS, accountDS("customerId") === customerDS("customerId"),"outer")
+  val fulldf = fullData.as[CustomerAccountOutput]
+  fulldf.show()
 
 
-  //END GIVEN CODE
 
   
   
